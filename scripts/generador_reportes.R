@@ -7,6 +7,13 @@ generar_reporte <- function(ruta_fasta) {
     return(NULL)
   }
 
+  estadisticas <- capture.output(
+    calcularEstadisticas(fasta$secuencia)
+  )
+
+  aminoacidos <- traducir(fasta$secuencia)
+  traduccion <- paste(aminoacidos, collapse = "")
+
   if (!dir.exists("results")) {
     dir.create("results")
   }
@@ -18,7 +25,9 @@ generar_reporte <- function(ruta_fasta) {
     "REPORTE DE ANALISIS DE SECUENCIA",
     paste("Archivo:", basename(ruta_fasta)),
     paste("Cabecera:", fasta$cabecera),
-    paste("Secuencia:", fasta$secuencia)
+    paste("Secuencia:", fasta$secuencia),
+    estadisticas,
+    paste("Aminoacidos:", traduccion)
   )
 
   writeLines(reporte, salida)
